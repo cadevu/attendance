@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for,  abort
 from flask_login import login_required, current_user
 from . import db
-from .models import Aula
+from models import Aula
 import random,string
 aulas = Blueprint('aulas',__name__)
 
@@ -37,6 +37,7 @@ def presenca():
     return render_template('presenca.html')
 
 @aulas.route('/codigo_aula/<codigo>',methods = ['POST','GET'])
+@login_required
 def codigo_aula(codigo):
     if request.method == 'POST':
         aula = Aula.query.filter_by(cod_auth = codigo).first()
@@ -76,6 +77,14 @@ def turmas():
 
     return render_template('turmas.html',turmas = turmas_json)
 
+@aulas.route('/aula/<id>')
+@login_required
+def show_aula(id):
+    aula = Aula.query.filter_by(id = id).first()
+    if aula:
+        return render_template('show_aula.html', aula = aula.to_dict())
+    else:
+        abort(404)
 
 
 

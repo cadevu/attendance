@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+<div class="title">
+    <h1>Alunos Presentes</h1>
+ </div>
+<div class=" box">
+<table>
+    <tr>
+      <th style="background-color: rgb(178, 187, 226)">Aluno</th>
+      <th style="background-color: rgb(178, 187, 226)">Matrícula</th>
+    </tr>
+    {% for aluno in aula.alunos_presentes %}
+    <tr>
+      <td style="background-color: rgb(213, 216, 218)"">{{aluno[0]}}</td>
+      <td style="background-color: rgb(213, 216, 218)"">{{aluno[1]}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+</div>
+
+
+
+{% endblock %}
