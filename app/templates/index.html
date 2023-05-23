@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  Aplicação de chamada
+</h1>
+<h2 class="subtitle">
+  Faça o <a href ={{url_for('auth.login')}}> Login </a> ou  <a href ={{url_for('auth.signup')}}>registre-se.
+</h2>
+{% endblock %}

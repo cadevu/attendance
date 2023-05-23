@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+{%for i in turmas%}
+<div class = 'box'>
+    <div class = 'text'>
+        <a href="{{ url_for('aulas/<i.id>') }}" class="navbar-item"><br>
+        Turma: {{i.turma}} <br>
+        Data: {{i.data_aula}} <br>
+
+    </div>
+
+
+</div>
+
+
+
+{% endfor %}
+{% endblock %}
