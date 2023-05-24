@@ -5,27 +5,28 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 db = SQLAlchemy()
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
 
 def create_app():
     app = Flask(__name__)
+    # config
     app.config['SECRET_KEY'] = 'secret'
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://cadevu:ZLNT1116#@localhost:5432/flask_db"
+
+    # init extensions
     db.init_app(app)
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    from .models import Professor
-    @login_manager.user_loader
-    def load_prof(prof_id):
-        return Professor.query.get(int(prof_id))
+    # register blueprints
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .controllers import blueprints
+    for bp in blueprints():
+        print(bp.name)
+        app.register_blueprint(bp, url_prefix = f"/{bp.name}")
 
-    from .aulas import aulas as aulas_blueprint
-    app.register_blueprint(aulas_blueprint)
+    from .auth.loaders import load_prof
 
     return app

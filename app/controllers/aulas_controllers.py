@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,  abort
 from flask_login import login_required, current_user
 from . import db
-from .models import Aula
+from ..models import Aula
 import random,string
 aulas = Blueprint('aulas',__name__)
 
@@ -19,7 +19,7 @@ def nova_aula_post():
     turma = request.form.get('turma')
     data_aula = request.form.get('data_aula')
     cod_auth = (''.join(random.choices(string.ascii_letters,k=5)))
-
+    print("here")
     aula = Aula(nome_disciplina = nome_disciplina,
                 cod_disciplina = cod_disciplina,
                 turma = turma,
@@ -47,7 +47,7 @@ def codigo_aula(codigo):
     else:
         return render_template('codigo_aula.html',codigo = codigo)
 
-@aulas.route('/presenca',methods = ['POST'])
+@aulas.route('aulas/presenca',methods = ['POST'])
 def presenca_post():
     cod_aula = request.form.get('cod_aula')
     matricula_aluno = request.form.get('matricula')
