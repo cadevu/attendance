@@ -38,9 +38,6 @@ def signup_post():
     matricula = request.form.get('matricula')
     nome = request.form.get('nome')
     password = request.form.get("password")
-    # if len(matricula) > 9:
-    #     flash("Matricula no formato inválido")
-    #     return redirect(url_for('auth.signup'))
 
     prof = Professor.query.filter_by(matricula = matricula).first()
     if prof:
