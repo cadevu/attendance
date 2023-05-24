@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,  abort
 from flask_login import login_required, current_user
 from . import db
-from models import Aula
+from .models import Aula
 import random,string
 aulas = Blueprint('aulas',__name__)
 
