@@ -6,48 +6,54 @@ import random,string
 aulas = Blueprint('aulas',__name__)
 
 
-@aulas.route('/nova_aula')
+@aulas.route('/new',methods = ['POST','GET'])
 @login_required
 def nova_aula():
-    return render_template("aula.html")
-
-@aulas.route('/nova_aula',methods = ['POST'])
-@login_required
-def nova_aula_post():
-    nome_disciplina = request.form.get('name')
-    cod_disciplina = request.form.get('codigo')
-    turma = request.form.get('turma')
-    data_aula = request.form.get('data_aula')
-    cod_auth = (''.join(random.choices(string.ascii_letters,k=5)))
-    print("here")
-    aula = Aula(nome_disciplina = nome_disciplina,
-                cod_disciplina = cod_disciplina,
-                turma = turma,
-                data_aula = data_aula,
-                professor = current_user.matricula,
-                cod_auth = cod_auth,
-                alunos_presentes = [],
-                status = 'OPEN')
-    db.session.add(aula)
-    db.session.commit()
-    return redirect(url_for('aulas.codigo_aula',codigo = aula.cod_auth))
+    if request.method == 'GET':
+        return render_template("aula.html")
+    else:
+        nome_disciplina = request.form.get('name')
+        cod_disciplina = request.form.get('codigo')
+        turma = request.form.get('turma')
+        data_aula = request.form.get('data_aula')
+        cod_auth = (''.join(random.choices(string.ascii_letters,k=5)))
+        print("here")
+        aula = Aula(nome_disciplina = nome_disciplina,
+                    cod_disciplina = cod_disciplina,
+                    turma = turma,
+                    data_aula = data_aula,
+                    professor = current_user.matricula,
+                    cod_auth = cod_auth,
+                    alunos_presentes = [],
+                    status = 'OPEN')
+        db.session.add(aula)
+        db.session.commit()
+        return redirect(url_for('aulas.codigo_aula',code = aula.cod_auth))
 
 @aulas.route('/presenca')
 def presenca():
     return render_template('presenca.html')
 
-@aulas.route('/codigo_aula/<codigo>',methods = ['POST','GET'])
+@aulas.route('/codigo_aula/<code>',methods = ['GET'])
 @login_required
-def codigo_aula(codigo):
-    if request.method == 'POST':
-        aula = Aula.query.filter_by(cod_auth = codigo).first()
+def codigo_aula(code):
+    return render_template('codigo_aula.html',codigo = code)
+    # if request.method == 'POST':
+    #     aula = Aula.query.filter_by(cod_auth = code).first()
+    #     aula.status = 'CLOSED'
+    #     db.session.commit()
+    #     return "<p> Chamada fechada<p>"
+
+@aulas.route('/codigo_aula/<code>',methods = ['POST'])
+@login_required
+def close_attendance(code):
+        aula = Aula.query.filter_by(cod_auth = code).first()
         aula.status = 'CLOSED'
         db.session.commit()
-        return "<p> Chamada fechada<p>"
-    else:
-        return render_template('codigo_aula.html',codigo = codigo)
+        return redirect(url_for('aulas.show_aula',id = aula.id))
 
-@aulas.route('aulas/presenca',methods = ['POST'])
+
+@aulas.route('/presenca',methods = ['POST'])
 def presenca_post():
     cod_aula = request.form.get('cod_aula')
     matricula_aluno = request.form.get('matricula')
@@ -66,7 +72,7 @@ def presenca_post():
     return render_template('presenca.html',nome = nome_aluno, matricula = matricula_aluno, data = aula.data_aula,
                            turma = aula.turma, disc = aula.nome_disciplina)
 
-@aulas.route('/turmas')
+@aulas.route('/')
 @login_required
 def turmas():
     matricula_prof = current_user.matricula
@@ -77,14 +83,22 @@ def turmas():
 
     return render_template('turmas.html',turmas = turmas_json)
 
-@aulas.route('/aula/<id>')
+@aulas.route('/<id>')
 @login_required
 def show_aula(id):
     aula = Aula.query.filter_by(id = id).first()
     if aula:
-        return render_template('show_aula.html', aula = aula.to_dict())
+        return render_template('show_aula.html', aula = aula)
     else:
         abort(404)
+
+@aulas.route('/<int:id>/delete',methods = ['POST','DELETE'])
+@login_required
+def destroy(id):
+    aula = db.get_or_404(Aula, id)
+    db.session.delete(aula)
+    db.session.commit()
+    flash(f"Aula de '{aula.nome}', de id: {aula.id} deletada")
 
 
 

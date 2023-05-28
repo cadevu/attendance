@@ -5,26 +5,43 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import Professor
 from flask_login import login_user, login_required, logout_user
 from . import auth
-@auth.route('/login')
+@auth.route('/login',methods = ['GET','POST'])
 def login():
-    return render_template("login.html")
-@auth.route('/login', methods = ['POST'])
-def login_post():
-    matricula = request.form.get('matricula')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
-    prof = Professor.query.filter_by(matricula = matricula).first()
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        matricula = request.form.get('matricula')
+        password = request.form.get('password')
+        remember = True if request.form.get('remember') else False
+        prof = Professor.query.filter_by(matricula = matricula).first()
 
 
-    if not prof:
-        flash("Professor não cadastrado na base de dados")
-        return redirect(url_for('auth.login'))
-    if not check_password_hash(prof.password, password):
-        flash("Senha incorreta, tente novamente.")
+        if not prof:
+            flash("Professor não cadastrado na base de dados")
+            return redirect(url_for('auth.login'))
+        if not check_password_hash(prof.password, password):
+            flash("Senha incorreta, tente novamente.")
+            return redirect(url_for('auth.login'))
+        login_user(prof, remember = remember)
+        return redirect(url_for('main.profile'))
 
-        return redirect(url_for('auth.login'))
-    login_user(prof, remember = remember)
-    return redirect(url_for('main.profile'))
+# @auth.route('/login', methods = ['POST'])
+# def login_post():
+#     matricula = request.form.get('matricula')
+#     password = request.form.get('password')
+#     remember = True if request.form.get('remember') else False
+#     prof = Professor.query.filter_by(matricula = matricula).first()
+
+
+#     if not prof:
+#         flash("Professor não cadastrado na base de dados")
+#         return redirect(url_for('auth.login'))
+#     if not check_password_hash(prof.password, password):
+#         flash("Senha incorreta, tente novamente.")
+
+#         return redirect(url_for('auth.login'))
+#     login_user(prof, remember = remember)
+#     return redirect(url_for('main.profile'))
 
 @auth.route('/signup')
 def signup():

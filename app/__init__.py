@@ -1,12 +1,14 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-from flask import Flask
+from flask import Flask,redirect , url_for, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
+index = Blueprint('index','index')
+
 
 def create_app():
     app = Flask(__name__)
@@ -24,9 +26,11 @@ def create_app():
 
     from .controllers import blueprints
     for bp in blueprints():
-        print(bp.name)
         app.register_blueprint(bp, url_prefix = f"/{bp.name}")
 
     from .auth.loaders import load_prof
 
+    app.register_blueprint(index,url_prefix = '/')
+
     return app
+

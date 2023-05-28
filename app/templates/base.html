@@ -50,8 +50,15 @@
                             {% if current_user.is_authenticated %}
                             <a href="{{ url_for('aulas.turmas') }}" class="navbar-item">
                                 Aulas
-
+                                {% endif %}
                         </a>
+
+                        {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('aulas.presenca') }}" class="navbar-item">
+                            Presença
+
+                    </a>
+
                         {% endif %}
 
 
