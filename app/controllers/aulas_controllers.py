@@ -100,6 +100,19 @@ def destroy(id):
     db.session.commit()
     flash(f"Aula de '{aula.nome}', de id: {aula.id} deletada")
 
+@aulas.route('/<id>/<matricula>/<nome>/delete',methods = ['POST','DELETE'])
+@login_required
+def destroy_student(id,matricula,nome):
+    aula = db.get_or_404(Aula, id)
+    aluno = [nome,matricula]
+    if aluno in aula.alunos_presentes:
+        print(aula.alunos_presentes)
+        print(aluno[0])
+        print(aluno[1])
+        aula.alunos_presentes.remove(aluno)
+    db.session.commit()
+    return {"response":True}
+
 
 
 
