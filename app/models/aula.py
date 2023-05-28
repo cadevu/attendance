@@ -21,5 +21,4 @@ class Aula(db.Model):
                 'matricula_prof':self.professor,
                 'alunos_presentes':self.alunos_presentes,
                 'cod_auth':self.cod_auth}
-    def students(self):
-        return self.alunos_presentes
+

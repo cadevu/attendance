@@ -76,7 +76,7 @@ def presenca_post():
 @login_required
 def turmas():
     matricula_prof = current_user.matricula
-    turmas = Aula.query.filter_by(professor = matricula_prof).all()
+    turmas = Aula.query.filter_by(professor = matricula_prof).order_by(Aula.data_aula.desc()).all()
     turmas_json =[]
     for i in turmas:
         turmas_json.append(i.to_dict())
@@ -111,7 +111,21 @@ def destroy_student(id,matricula,nome):
         print(aluno[1])
         aula.alunos_presentes.remove(aluno)
     db.session.commit()
-    return {"response":True}
+    return redirect(url_for('aulas.show_aula', id = id))
+
+@aulas.route('/<id>/new_student',methods = ['GET','POST'])
+@login_required
+def add_student(id):
+    if request.method == 'GET':
+        return render_template('new_student.html', id = id)
+    else:
+        aula = db.get_or_404(Aula, id)
+        nome = request.form.get('nome')
+        matricula = request.form.get('matricula')
+        aluno = [nome,matricula]
+        aula.alunos_presentes.append(aluno)
+        db.session.commit()
+        return redirect(url_for('aulas.show_aula',id = id))
 
 
 

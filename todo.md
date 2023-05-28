@@ -11,4 +11,5 @@ desmistificar os POST no controller AULAS
 
 
 ## O que farei agora:
+- Editar aula, editar dados de cadastro e editar alunos presentes
 - Refatorar as rotas das funções já existentes

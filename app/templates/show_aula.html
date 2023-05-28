@@ -3,7 +3,6 @@
 {% block content %}
 <html>
   <head>
-    <title>Lista de Alunos</title>
     <style>
         table {
             border-collapse: collapse;
@@ -25,8 +24,11 @@
     </style>
 </head>
 <body>
-    <h1>Lista de Alunos</h1>
-    <a href="{{ url_for('aulas.destroy',id = aula.id) }}" class="btn btn-success"> <span>Add New</span></a>
+  <div class = 'container'>
+  <h1> Disciplina: {{aula.nome_disciplina}}, Turma: {{aula.turma}}, Data: {{aula.data_aula}}</h1>
+    <h1>Alunos Presentes</h1>
+  </div>
+    <a href="{{ url_for('aulas.add_student',id = aula.id) }}" class="btn btn-success"> <span>Add New</span></a>
     <div class = 'box'>
     <table>
         <tr>
@@ -39,8 +41,7 @@
                 <td>{{ aluno[0] }}</td>
                 <td>{{ aluno[1] }}</td>
                 <td>
-                    <!-- <a href="{{url_for('aulas.destroy_student',id = aula.id,matricula = aluno[1], nome = aluno[0])}}'",data_action = delete>Excluir</a> -->
-                    <form action = "{{url_for('aulas.destroy_student',id = aula.id,matricula = aluno[1], nome = aluno[0])}}" method = 'POST'>
+                     <form action = "{{url_for('aulas.destroy_student',id = aula.id,matricula = aluno[1], nome = aluno[0])}}" method = 'POST'>
                       <button type = 'submit'> Excluir</button>
 
                     </form>
