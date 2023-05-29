@@ -1,4 +1,4 @@
-from .. import login_manager
+from ..webapp import login_manager
 from ..models import Professor
 
 @login_manager.user_loader

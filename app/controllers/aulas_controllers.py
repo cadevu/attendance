@@ -10,7 +10,7 @@ aulas = Blueprint('aulas',__name__)
 @login_required
 def nova_aula():
     if request.method == 'GET':
-        return render_template("aula.html")
+        return render_template("aulas/new.html")
     else:
         nome_disciplina = request.form.get('name')
         cod_disciplina = request.form.get('codigo')
@@ -32,17 +32,12 @@ def nova_aula():
 
 @aulas.route('/presenca')
 def presenca():
-    return render_template('presenca.html')
+    return render_template('aulas/presenca.html')
 
 @aulas.route('/codigo_aula/<code>',methods = ['GET'])
 @login_required
 def codigo_aula(code):
-    return render_template('codigo_aula.html',codigo = code)
-    # if request.method == 'POST':
-    #     aula = Aula.query.filter_by(cod_auth = code).first()
-    #     aula.status = 'CLOSED'
-    #     db.session.commit()
-    #     return "<p> Chamada fechada<p>"
+    return render_template('aulas/codigo_aula.html',codigo = code)
 
 @aulas.route('/codigo_aula/<code>',methods = ['POST'])
 @login_required
@@ -69,7 +64,7 @@ def presenca_post():
     aula.alunos_presentes.append([nome_aluno, matricula_aluno])
     db.session.commit()
     flash('Presença registrada com sucesso!','info')
-    return render_template('presenca.html',nome = nome_aluno, matricula = matricula_aluno, data = aula.data_aula,
+    return render_template('aulas/presenca.html',nome = nome_aluno, matricula = matricula_aluno, data = aula.data_aula,
                            turma = aula.turma, disc = aula.nome_disciplina)
 
 @aulas.route('/')
@@ -81,14 +76,14 @@ def turmas():
     for i in turmas:
         turmas_json.append(i.to_dict())
 
-    return render_template('turmas.html',turmas = turmas_json)
+    return render_template('aulas/classes.html',turmas = turmas_json)
 
 @aulas.route('/<id>')
 @login_required
 def show_aula(id):
     aula = Aula.query.filter_by(id = id).first()
     if aula:
-        return render_template('show_aula.html', aula = aula)
+        return render_template('aulas/show.html', aula = aula)
     else:
         abort(404)
 
@@ -117,7 +112,7 @@ def destroy_student(id,matricula,nome):
 @login_required
 def add_student(id):
     if request.method == 'GET':
-        return render_template('new_student.html', id = id)
+        return render_template('aulas/new_student.html', id = id)
     else:
         aula = db.get_or_404(Aula, id)
         nome = request.form.get('nome')

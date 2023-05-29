@@ -4,10 +4,10 @@ class Aula(db.Model):
     __tablename__ = 'aulas'
     id = db.Column(db.Integer, primary_key = True)
     nome_disciplina = db.Column(db.String(500), nullable = False)
-    cod_disciplina = db.Column(db.String(6), nullable = False)
-    turma = db.Column(db.String(2),nullable = False)
+    cod_disciplina = db.Column(db.String, nullable = False)
+    turma = db.Column(db.String,nullable = False)
     data_aula = db.Column(db.Date,nullable = False)
-    professor = db.Column(db.String(9),db.ForeignKey('professores.matricula'))
+    professor = db.Column(db.String,db.ForeignKey('professores.matricula'))
     alunos_presentes = db.Column(MutableList.as_mutable(db.ARRAY(db.String)))
     cod_auth = db.Column(db.String(5),nullable = False)
     status = db.Column(db.String)

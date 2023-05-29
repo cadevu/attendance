@@ -1,4 +1,4 @@
-from app import db
+from ..webapp import db
 from .aula import Aula
 from .professor import Professor
 
