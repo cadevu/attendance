@@ -23,3 +23,7 @@ This application consists of a simple system in which the teacher will log in, c
 `exit()`
 # Run app
 `flask run`
+# Next steps
+- Improve front-end (do it by myself)
+- Add anti-fraud features
+- Provide a csv file with students
