@@ -9,7 +9,7 @@ This application consists of a simple system in which the teacher will log in, c
 `export FLASK_APP=app/webapp.py`
 # Create db
 ## Put your db credentials and app secret-key  in .env file and run
-
+### note: you have to download postgresql on your machine and create a user with createdb attribute
 `flask shell`
 
 `from app.webapp import app,db`
