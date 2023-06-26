@@ -2,7 +2,6 @@
 
 {% block content %}
 <html>
-  <head>
     <style>
         table {
             border-collapse: collapse;
@@ -15,22 +14,23 @@
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #acabab;
         }
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
     </style>
-</head>
 <body>
-  <div class = 'container'>
-  <h1> Disciplina: {{aula.nome_disciplina}}, Turma: {{aula.turma}}, Data: {{aula.data_aula}}</h1>
-    <h1>Alunos Presentes</h1>
-  </div>
-    <a href="{{ url_for('aulas.add_student',id = aula.id) }}" class="btn btn-success"> <span>Add New</span></a>
+
+  <h1 class = 'title'> Disciplina: {{aula.nome_disciplina}}, Turma: {{aula.turma}}, Data: {{aula.data_aula}}</h1>
+
+
+    <a href="{{ url_for('aulas.add_student',id = aula.id) }}" class="btn btn-success"> <button class="button is-primary ">Add New</button></a>
     <div class = 'box'>
-    <table>
+     <b>Alunos Presentes</b> 
+     
+    <table class = 'table is-striped' >
         <tr>
             <th>Nome</th>
             <th>Matrícula</th>
